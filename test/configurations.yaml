@@ -1,0 +1,4 @@
+development:
+  gobo:
+    base: http://localhost:4242
+    debug: 1
