@@ -42,7 +42,6 @@ class Sublime {
     } else {
       fetch = window.fetch;
     }
-      
   
     return this.response = await fetch( this.url, {
       mode: "cors",
@@ -82,9 +81,6 @@ Meta.mixin(Sublime.prototype, [
     fetch: function () {
       return this._.fetch;
     },
-    resource: function () {
-      return this._.resource;
-    },
     method: function () {
       return this._.method.toUpperCase();
     },
@@ -92,16 +88,6 @@ Meta.mixin(Sublime.prototype, [
       return this._.url;
     },
     headers: function () {
-      if ( this._.headers == null ) {
-        this._.headers = {};
-      }
-      
-      if ( Type.isObject(this._.content) ) {
-        if ( this._.headers["Content-Type"] == null ) {
-          this._.headers[ "Content-Type" ] = "application/json";
-        }
-      }
-      
       return this._.headers;
     },
     body: function () {

@@ -48,21 +48,34 @@ const buildURL = function ( context, input, options={} ) {
 
 const createMethod = function ( context, name ) {
   const issue = async function ( input, options={} ) {
-    const resource = context.resource.methods[name];
+    const { request, response } = context.resource.methods[name];
     const url = buildURL( context, input, options );
+
+    const defaultHeaders = {};
+    if ( request.type != null ) {
+      defaultHeaders[ "Content-Type" ] = request.type;
+    }
+    if ( response.type != null ) {
+      defaultHeaders[ "Accept" ] = response.type;
+    }
+
 
     const sublime = r.createSublime([
       r.fetch( context.fetch ),
       r.url( url ),
       r.method( name ),
       r.headers( context.headers ),
+      r.headers( defaultHeaders ),
       r.headers( options.headers ),
       r.content( options.content ?? input )
     ]);
 
     await sublime.issue();
-    sublime.success( resource.response.status );
-    if ( resource.response.type == null || resource.type === "application/json" ) {
+    sublime.success( response.status );
+
+    const responseType = sublime.response.headers.get("Content-Type");
+
+    if ( responseType === "application/json" ) {
       return await sublime.json();
     } else {
       return await sublime.text();

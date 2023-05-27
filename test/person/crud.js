@@ -5,8 +5,7 @@ const crud = async function ( $ ) {
 
     await h.test( "create person", h.target( "person-crud", async () => {
       const result = await $.gobo.people.post({
-        foo: "foo",
-        bar: "bar"
+        name: "David Test", 
       });
 
       console.log(result);
