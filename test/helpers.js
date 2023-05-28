@@ -2,14 +2,15 @@ import FS from "node:fs/promises";
 import Path from "node:path";
 import fetch from "node-fetch";
 import YAML from "js-yaml";
-import assert from "@dashkite/assert";
+import AJV from "ajv"
+import assert from "./assert.js";
 import amen from "@dashkite/amen";
 import { confidential } from "panda-confidential";
 import getGOBOClient from "../src/index.js";
 
 const { test } = amen;
 const Confidential = confidential();
-
+const ajv = new AJV();
 
 
 const getConfiguration = async function ( environment ) {
@@ -100,6 +101,37 @@ const fail = async function ( status, f ) {
 };
 
 
+const conforms = function ( resources ) {
+  return async function(name, method, json ) {
+
+    const schema = resources[name]?.methods[method]?.response.schema;
+
+    if ( schema == null ) {
+      throw new Error(`the response resource ${name} ${method} is undefined`);
+    }
+    if (json == null) {
+      throw new Error("404 response from API (null)");
+    }
+
+    let isValid;
+
+    try {
+      isValid = ajv.validate(schema, json);
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+
+    if (!isValid) {
+      console.log(json);
+      console.log(JSON.stringify(ajv.errors, null, 2));
+      throw new Error("This resource does not conform to the specified schema.");
+    }
+  };
+};
+
+
+
 
 export {
   getGOBO,
@@ -108,5 +140,6 @@ export {
   now,
   _test as test,
   assert,
-  fail
+  fail,
+  conforms
 }

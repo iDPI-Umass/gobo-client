@@ -67,7 +67,11 @@ class Sublime {
   }
 
   async json () {
-    return this.response.json()
+    return this.response.json();
+  }
+
+  async text () {
+    return this.response.text();
   }
 
 }

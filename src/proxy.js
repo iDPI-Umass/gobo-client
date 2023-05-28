@@ -6,6 +6,8 @@ const assemble = function ( resources, options ) {
     get: function ( target, name ) {
       if ( name === "then" ) {
         return;
+      } else if ( name === "spec") {
+        return resources;
       } else if ( resources[ name ] == null ) {
         throw new Error( `resource [ ${ name } ] is not defined` );
       } else {
@@ -59,6 +61,11 @@ const createMethod = function ( context, name ) {
       defaultHeaders[ "Accept" ] = response.type;
     }
 
+    let content = null;
+    if ( ["put", "post"].includes(name) ) {
+      content = options.content ?? input;
+    }
+
 
     const sublime = r.createSublime([
       r.fetch( context.fetch ),
@@ -67,7 +74,7 @@ const createMethod = function ( context, name ) {
       r.headers( context.headers ),
       r.headers( defaultHeaders ),
       r.headers( options.headers ),
-      r.content( options.content ?? input )
+      r.content( content )
     ]);
 
     await sublime.issue();

@@ -11,9 +11,11 @@ import * as person from "./person/index.js";
 (async function () {
   const $ = {
     h: h,
-    gobo: await h.getGOBO()
+    gobo: await h.getGOBO(),
   };
-    
+
+  $.conforms = h.conforms( $.gobo.spec );
+
 
   print( await h.test( "GOBO Client", [
     await h.test( "CRUD", [
