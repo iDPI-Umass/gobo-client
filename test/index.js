@@ -4,7 +4,7 @@ import * as h from "./helpers.js";
 
 const { success } = amen;
 
-
+import * as link from "./link/index.js";
 import * as person from "./person/index.js";
 
 
@@ -19,6 +19,7 @@ import * as person from "./person/index.js";
 
   print( await h.test( "GOBO Client", [
     await h.test( "CRUD", [
+      await h.test( "Link", await link.crud( $ ) ),
       await h.test( "Person", await person.crud( $ ) )
     ])
 

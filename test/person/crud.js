@@ -14,9 +14,8 @@ const crud = async function ( $ ) {
 
     await h.test( "list people", h.target( "person-crud", async () => {
       const people = await $.gobo.people.get();
-
       $.conforms( "people", "get", people );
-    })),
+    })),  
 
     await h.test( "get person", h.target( "person-crud", async () => {
       const _person = await $.gobo.person.get( person );
