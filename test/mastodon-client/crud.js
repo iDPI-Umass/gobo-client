@@ -6,12 +6,22 @@ const crud = async function ( $ ) {
 
     await h.test( "create mastodon client", h.target( "mastodon-client-crud", async () => {
       client = await $.gobo.mastodonClients.post({
-        base_url: "https://twitter.com",
+        base_url: await h.random(),
         client_id: await h.random(),
         client_secret: await h.random(),
       });
 
       $.conforms( "mastodon_clients", "post", client );
+    })),
+
+    await h.test( "conflict protection", h.target( "mastodon-client-crud", async () => {
+      await h.fail( 409, async function () {
+        return await $.gobo.mastodonClients.post({
+          base_url: client.base_url,
+          client_id: await h.random(),
+          client_secret: await h.random(),
+        });
+      });
     })),
 
     await h.test( "list mastodonclients", h.target( "mastodon-client-crud", async () => {

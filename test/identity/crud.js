@@ -8,7 +8,7 @@ const crud = async function ( $ ) {
       identity = await $.gobo.identities.post({
         person_id: 1,
         base_url: "https://twitter.com",
-        profile_url: "https://twitter.com/davidgobo1",
+        profile_url: await h.random(),
         profile_image: "https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png",
         username: `davidgobo${ await h.random() }`,
         name: "David Test",
@@ -17,6 +17,21 @@ const crud = async function ( $ ) {
       });
 
       $.conforms( "identities", "post", identity );
+    })),
+
+    await h.test( "conflict protection", h.target( "identity-crud", async () => {
+      await h.fail( 409, async function () {
+        return await $.gobo.identities.post({
+          person_id: 1,
+          base_url: "https://twitter.com",
+          profile_url: identity.profile_url,
+          profile_image: "https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png",
+          username: `davidgobo${ await h.random() }`,
+          name: "David Test",
+          oauth_token: await h.random(),
+          oauth_token_secret: await h.random()
+        });
+      });
     })),
 
     await h.test( "list identities", h.target( "identity-crud", async () => {
