@@ -1,9 +1,12 @@
 import { parseTemplate } from 'url-template';
+import * as Text from "@dashkite/joy/text";
 import r from "./request-helpers.js";
 
 const assemble = function ( resources, options ) {
   return new Proxy( {}, {
     get: function ( target, name ) {
+      name = Text.underscored(Text.uncase(name));
+
       if ( name === "then" ) {
         return;
       } else if ( name === "spec") {

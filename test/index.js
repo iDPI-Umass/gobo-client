@@ -5,9 +5,10 @@ import * as h from "./helpers.js";
 const { success } = amen;
 
 import * as link from "./link/index.js";
-import * as person from "./person/index.js";
 import * as identity from "./identity/index.js";
+import * as person from "./person/index.js";
 import * as registration from "./registration/index.js";
+import * as mastodonClient from "./mastodon-client/index.js";
 
 
 (async function () {
@@ -24,7 +25,8 @@ import * as registration from "./registration/index.js";
       await h.test( "Link", await link.crud( $ ) ),
       await h.test( "Person", await person.crud( $ ) ),
       await h.test( "Identity", await identity.crud( $ ) ),
-      await h.test( "Registration", await registration.crud( $ ) )
+      await h.test( "Registration", await registration.crud( $ ) ),
+      await h.test( "Mastodon Client", await mastodonClient.crud( $ ) )
     ])
 
   ]));

@@ -10,8 +10,7 @@ const crud = async function ( $ ) {
         base_url: "https://twitter.com",
         oauth_token: await h.random(),
         oauth_token_secret: await h.random(),
-        saved_state: "current state",
-        request_time: h.now()
+        state: "current state"
       });
 
       $.conforms( "registrations", "post", registration );
@@ -29,7 +28,7 @@ const crud = async function ( $ ) {
 
     await h.test( "update registration", h.target( "registration-crud", async () => {
       const _registration = { ...registration };
-      _registration.saved_state = "current state edited";
+      _registration.state = "current state edited";
       
       registration = await $.gobo.registration.put( _registration );
 
@@ -39,8 +38,7 @@ const crud = async function ( $ ) {
         "base_url",
         "oauth_token",
         "oauth_token_secret",
-        "saved_state",
-        "request_time",
+        "state",
         "created"
       ]);
      
