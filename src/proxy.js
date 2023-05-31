@@ -78,7 +78,7 @@ const createMethod = function ( context, name ) {
     ]);
 
     await sublime.issue();
-    sublime.success( response.status );
+    await sublime.success( response.status );
 
     const responseType = sublime.response.headers.get("Content-Type");
 

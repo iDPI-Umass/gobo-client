@@ -6,6 +6,7 @@ const { success } = amen;
 
 import * as link from "./link/index.js";
 import * as person from "./person/index.js";
+import * as identity from "./identity/index.js";
 
 
 (async function () {
@@ -20,7 +21,8 @@ import * as person from "./person/index.js";
   print( await h.test( "GOBO Client", [
     await h.test( "CRUD", [
       await h.test( "Link", await link.crud( $ ) ),
-      await h.test( "Person", await person.crud( $ ) )
+      await h.test( "Person", await person.crud( $ ) ),
+      await h.test( "Identity", await identity.crud( $ ) )
     ])
 
   ]));

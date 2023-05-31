@@ -130,6 +130,12 @@ const conforms = function ( resources ) {
   };
 };
 
+const partialEqual = function ( A, B, list ) {
+  for ( const item of list ) {
+    assert.equal( A[item], B[item] );
+  }
+}
+
 
 
 
@@ -141,5 +147,6 @@ export {
   _test as test,
   assert,
   fail,
-  conforms
+  conforms,
+  partialEqual
 }

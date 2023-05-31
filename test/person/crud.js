@@ -28,9 +28,12 @@ const crud = async function ( $ ) {
       
       person = await $.gobo.person.put( _person );
 
-      h.assert( _person.id === person.id );
-      h.assert( _person.name === person.name );
-      h.assert( _person.created === person.created );
+      h.partialEqual( _person, person, [
+        "id",
+        "name",
+        "created"
+      ]);
+
       h.assert( _person.updated < person.updated );
     })),
 

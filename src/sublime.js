@@ -52,12 +52,13 @@ class Sublime {
     });
   }
 
-  success ( status ) {
+  async success ( status ) {
     if ( this.response.status !== status ) {
       throw new SublimeError( this.response, `
         sublime: unexpected response status
         ${ this.method } ${ this.url }
         responded with status ${ this.response.status }
+        ${ await this.response.text() }
       `);
     }
   }
