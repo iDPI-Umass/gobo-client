@@ -5,22 +5,22 @@ const crud = async function ( $ ) {
   return [
 
     await h.test( "create mastodon client", h.target( "mastodon-client-crud", async () => {
-      client = await $.gobo.mastodonClients.post({
+      client = await $.gobo.mastodonClients.post({ content: {
         base_url: await h.random(),
         client_id: await h.random(),
         client_secret: await h.random(),
-      });
+      }});
 
       $.conforms( "mastodon_clients", "post", client );
     })),
 
     await h.test( "conflict protection", h.target( "mastodon-client-crud", async () => {
       await h.fail( 409, async function () {
-        return await $.gobo.mastodonClients.post({
+        return await $.gobo.mastodonClients.post({ content: {
           base_url: client.base_url,
           client_id: await h.random(),
           client_secret: await h.random(),
-        });
+        }});
       });
     })),
 

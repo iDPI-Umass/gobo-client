@@ -5,11 +5,11 @@ const crud = async function ( $ ) {
   return [
 
     await h.test( "create filter", h.target( "filter-crud", async () => {
-      filter = await $.gobo.filters.post({
+      filter = await $.gobo.filters.post({ content: {
         person_id: 1,
         category: "keyword",
         word: "word to filter"
-      });
+      }});
 
       $.conforms( "filters", "post", filter );
     })),

@@ -5,13 +5,13 @@ const crud = async function ( $ ) {
   return [
 
     await h.test( "create registration", h.target( "registration-crud", async () => {
-      registration = await $.gobo.registrations.post({
+      registration = await $.gobo.registrations.post({ content: {
         person_id: 1,
         base_url: "https://twitter.com",
         oauth_token: await h.random(),
         oauth_token_secret: await h.random(),
         state: "current state"
-      });
+      }});
 
       $.conforms( "registrations", "post", registration );
     })),

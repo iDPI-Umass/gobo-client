@@ -1,66 +1,71 @@
 const crud = async function ( $ ) {
   const { h } = $;
-  let link;
+  let source;
 
   return [
 
-    await h.test( "create link", h.target( "link-crud", async () => {
-      link = await $.gobo.links.post({
-        origin_type: "A",
-        origin_id: 1,
-        target_type: "B",
-        target_id: 1,
-        name: await h.random()
-      });
+    await h.test( "create source", h.target( "source-crud", async () => {
+      source = await $.gobo.sources.post({ content: {
+        base_url: "https://twitter.com",
+        url: await h.random(),
+        username: await h.random(),
+        name: "David Test",
+        icon_url: await h.random(),
+        active: false
+      }});
 
-      $.conforms( "links", "post", link );
+      $.conforms( "sources", "post", source );
     })),
 
-    await h.test( "conflict protection", h.target( "link-crud", async () => {
+    await h.test( "conflict protection", h.target( "source-crud", async () => {
       await h.fail( 409, async function () {
-        return await $.gobo.links.post({
-          origin_type: link.origin_type,
-          origin_id: link.origin_id,
-          target_type: link.target_type,
-          target_id: link.target_id,
-          name: link.name
+        return await $.gobo.sources.post({
+          content: {
+            base_url: "https://twitter.com",
+            url: source.url,
+            username: await h.random(),
+            name: "David Test",
+            icon_url: await h.random(),
+            active: false
+          }
         });
       });
     })),
 
-    await h.test( "list links", h.target( "link-crud", async () => {
-      const links = await $.gobo.links.get();
-      $.conforms( "links", "get", links );
+    await h.test( "list sources", h.target( "source-crud", async () => {
+      const sources = await $.gobo.sources.get();
+      $.conforms( "sources", "get", sources );
     })),  
 
-    await h.test( "get link", h.target( "link-crud", async () => {
-      const _link = await $.gobo.link.get(link);
-      h.assert.deepEqual( link, _link );
+    await h.test( "get source", h.target( "source-crud", async () => {
+      const _source = await $.gobo.source.get(source);
+      h.assert.deepEqual( source, _source );
     })),
 
-    await h.test( "update link", h.target( "link-crud", async () => {
-      const _link = { ...link };
-      _link.name = "test-edge-edited";
+    await h.test( "update source", h.target( "source-crud", async () => {
+      const _source = { ...source };
+      _source.name = "David Test Edited";
       
-      link = await $.gobo.link.put( _link );
+      source = await $.gobo.source.put( _source );
 
-      h.partialEqual( _link, link, [
+      h.partialEqual( _source, source, [
         "id",
-        "origin_type",
-        "origin_id",
-        "target_type",
-        "target_id",
+        "base_url",
+        "url",
+        "username",
         "name",
+        "icon_url",
+        "active",
         "created"
       ]);
 
-      h.assert( _link.updated < link.updated );
+      h.assert( _source.updated < source.updated );
     })),
 
-    await h.test( "delete link", h.target( "link-crud", async () => {
-      await $.gobo.link.delete( link );
+    await h.test( "delete source", h.target( "source-crud", async () => {
+      await $.gobo.source.delete( source );
       await h.fail( 404, async function () {
-        await $.gobo.link.get( link )
+        await $.gobo.source.get( source )
       });
     })),
   

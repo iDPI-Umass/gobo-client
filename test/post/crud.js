@@ -5,7 +5,7 @@ const crud = async function ( $ ) {
   return [
 
     await h.test( "create post", h.target( "post-crud", async () => {
-      post = await $.gobo.posts.post({
+      post = await $.gobo.posts.post({ content: {
         "source_id": 1,
         "base_url": "https://twitter.com",
         "platform_id": await h.random(),
@@ -14,7 +14,7 @@ const crud = async function ( $ ) {
         "author": "David Test",
         "url": await h.random(),
         "visibility": "public"
-      });
+      }});
 
       $.conforms( "posts", "post", post );
     })),

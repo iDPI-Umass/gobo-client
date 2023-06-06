@@ -24,6 +24,10 @@ import * as post from "./post/index.js";
 
 
   print( await h.test( "GOBO Client", [
+    await h.test( "Authentication", [
+      await h.test( "Me", await person.me( $ ) )
+    ]),
+
     await h.test( "CRUD", [
       await h.test( "Link", await link.crud( $ ) ),
       await h.test( "Person", await person.crud( $ ) ),

@@ -1,0 +1,14 @@
+client-test:
+  namespace: gobo
+  secrets:
+    - name: gobo-client-login-test
+      type: bundle
+      bundle:
+        - name: client-id
+          type: prompt
+        - name: client-secret
+          type: prompt
+        - name: email
+          type: prompt
+        - name: password
+          type: prompt

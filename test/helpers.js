@@ -6,6 +6,7 @@ import AJV from "ajv"
 import assert from "./assert.js";
 import amen from "@dashkite/amen";
 import { confidential } from "panda-confidential";
+import { getSecret } from "@dashkite/dolores/secrets";
 import getGOBOClient from "../src/index.js";
 
 const { test } = amen;
@@ -23,6 +24,28 @@ const getConfiguration = async function ( environment ) {
   return configuration;
 };
 
+const getToken = async function () {
+  const response = await fetch(
+    "https://dev-j72vlrggk1ft8e8u.us.auth0.com/oauth/token", {
+    method: "POST",
+    headers: { 
+      "content-type": "application/json"
+    },
+    body: JSON.stringify({ 
+      grant_type: "password",
+      username: await getSecret("gobo-client-login-test/email"),
+      password: await getSecret("gobo-client-login-test/password"),
+      audience: "https://gobo.social/api",
+      scope: "admin general",
+      client_id: await getSecret("gobo-client-login-test/client-id"),
+      client_secret: await getSecret("gobo-client-login-test/client-secret") 
+    })
+  });
+  
+  const { access_token } = await response.json();
+  return access_token;
+};
+
 const getGOBO = async function () {
   const environment = process.env.environment;
   if ( environment == null ) {
@@ -34,7 +57,9 @@ const getGOBO = async function () {
     throw new Error( "There is no GOBO configuration specified for this environment" );
   }
 
-  return await getGOBOClient({ ...configuration.gobo, fetch });
+  const token = await getToken();  
+
+  return await getGOBOClient({ ...configuration.gobo, token, fetch });
 };
 
 
@@ -102,7 +127,7 @@ const fail = async function ( status, f ) {
 
 
 const conforms = function ( resources ) {
-  return async function(name, method, json ) {
+  return function(name, method, json ) {
 
     const schema = resources[name]?.methods[method]?.response.schema;
 

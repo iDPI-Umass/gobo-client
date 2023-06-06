@@ -5,9 +5,10 @@ const crud = async function ( $ ) {
   return [
 
     await h.test( "create person", h.target( "person-crud", async () => {
-      person = await $.gobo.people.post({
-        name: "David Test", 
-      });
+      person = await $.gobo.people.post({ content: {
+        name: "David Test",
+        authority_id: await h.random()
+      }});
 
       $.conforms( "people", "post", person );
     })),
@@ -31,6 +32,7 @@ const crud = async function ( $ ) {
       h.partialEqual( _person, person, [
         "id",
         "name",
+        "authority_id",
         "created"
       ]);
 

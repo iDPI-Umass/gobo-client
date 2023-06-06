@@ -5,7 +5,7 @@ const crud = async function ( $ ) {
   return [
 
     await h.test( "create identity", h.target( "identity-crud", async () => {
-      identity = await $.gobo.identities.post({
+      identity = await $.gobo.identities.post({ content: {
         person_id: 1,
         base_url: "https://twitter.com",
         profile_url: await h.random(),
@@ -14,14 +14,14 @@ const crud = async function ( $ ) {
         name: "David Test",
         oauth_token: await h.random(),
         oauth_token_secret: await h.random()
-      });
+      }});
 
       $.conforms( "identities", "post", identity );
     })),
 
     await h.test( "conflict protection", h.target( "identity-crud", async () => {
       await h.fail( 409, async function () {
-        return await $.gobo.identities.post({
+        return await $.gobo.identities.post({ content: {
           person_id: 1,
           base_url: "https://twitter.com",
           profile_url: identity.profile_url,
@@ -30,7 +30,7 @@ const crud = async function ( $ ) {
           name: "David Test",
           oauth_token: await h.random(),
           oauth_token_secret: await h.random()
-        });
+        }});
       });
     })),
 

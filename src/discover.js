@@ -9,7 +9,7 @@ const discover = async function ( options ) {
   ]);
 
   await sublime.issue();
-  sublime.success( 200 );
+  await sublime.success( 200 );
   return await sublime.json();
 };
 

@@ -2,6 +2,13 @@ import { parseTemplate } from 'url-template';
 import * as Text from "@dashkite/joy/text";
 import r from "./request-helpers.js";
 
+
+const setToken = function ( options ) {
+  return function ( token ) {
+    options.token = token;
+  };
+};
+
 const assemble = function ( resources, options ) {
   return new Proxy( {}, {
     get: function ( target, name ) {
@@ -11,6 +18,8 @@ const assemble = function ( resources, options ) {
         return;
       } else if ( name === "spec") {
         return resources;
+      } else if ( name === "setToken" ) {
+        return setToken( options );
       } else if ( resources[ name ] == null ) {
         throw new Error( `resource [ ${ name } ] is not defined` );
       } else {
@@ -27,9 +36,9 @@ const createResource = function ( context ) {
   return new Proxy( {}, {
     get: function ( target, name ) {
       if ( name === "path" ) {
-        return ( input, options ) => buildPath( context, input, options );
+        return ( parameters ) => buildPath( context, parameters );
       } else if ( name === "url" ) {
-        return ( input, options ) => buildURL( context, input, options );
+        return ( parameters ) => buildURL( context, parameters );
       } else if ( context.resource.methods[ name ] != null ) {
         return createMethod( context, name );
       } else {
@@ -41,21 +50,28 @@ const createResource = function ( context ) {
   });
 };
 
-const buildPath = function ( context, input, options={} ) {
-  const parameters = Object.assign( {}, input, options.parameters );
+const buildPath = function ( context, parameters={} ) {
   return parseTemplate( context.resource.template ).expand( parameters );
 }
 
-const buildURL = function ( context, input, options={} ) {
-  const path = buildPath( context, input, options );
+const buildURL = function ( context, parameters ) {
+  const path = buildPath( context, parameters );
   return context.base + path;
 }
 
 const createMethod = function ( context, name ) {
-  const issue = async function ( input, options={} ) {
+  const issue = async function ( input={}, options={} ) {
     const { request, response } = context.resource.methods[name];
-    const url = buildURL( context, input, options );
-
+    
+    let url = null;
+    if ( ["get", "put", "delete"].includes(name) ) {
+      url = buildURL( context, input );
+    } else if ( ["post", "patch"] ) {
+      url = buildURL( context, input.parameters );
+    } else {
+      throw new Error (`not prepared for method ${name}`);
+    }
+    
     const defaultHeaders = {};
     if ( request.type != null ) {
       defaultHeaders[ "Content-Type" ] = request.type;
@@ -65,10 +81,11 @@ const createMethod = function ( context, name ) {
     }
 
     let content = null;
-    if ( ["put", "post"].includes(name) ) {
-      content = options.content ?? input;
+    if ( ["post", "patch"].includes(name) ) {
+      content = input.content;
+    } else if ( ["put"].includes(name) ) {
+      content = input;
     }
-
 
     const sublime = r.createSublime([
       r.fetch( context.fetch ),
@@ -77,7 +94,8 @@ const createMethod = function ( context, name ) {
       r.headers( context.headers ),
       r.headers( defaultHeaders ),
       r.headers( options.headers ),
-      r.content( content )
+      r.content( content ),
+      r.token( context.token )
     ]);
 
     await sublime.issue();
