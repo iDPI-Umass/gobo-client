@@ -12,6 +12,7 @@ import * as mastodonClient from "./mastodon-client/index.js";
 import * as filter from "./filter/index.js";
 import * as source from "./source/index.js";
 import * as post from "./post/index.js";
+import * as action from "./action/index.js";
 
 
 (async function () {
@@ -37,6 +38,10 @@ import * as post from "./post/index.js";
       await h.test( "Filter", await filter.crud( $ ) ),
       await h.test( "Source", await source.crud( $ ) ),
       await h.test( "Post", await post.crud( $ ) )
+    ]),
+
+    await h.test( "Actions", [
+      await h.test( "Onboard Identity", await action.onboardIdentity( $ ) )
     ])
 
   ]));
