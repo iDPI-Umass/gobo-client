@@ -42,6 +42,10 @@ import * as action from "./action/index.js";
 
     await h.test( "Actions", [
       await h.test( "Onboard Identity", await action.onboardIdentity( $ ) )
+    ]),
+
+    await h.test( "Resources", [
+      await h.test( "Identity", await identity.resource( $ ) ),
     ])
 
   ]));

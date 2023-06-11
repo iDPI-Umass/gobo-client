@@ -6,7 +6,7 @@ const crud = async function ( $ ) {
 
     await h.test( "create mastodon client", h.target( "mastodon-client-crud", async () => {
       client = await $.gobo.mastodonClients.post({ content: {
-        base_url: await h.random(),
+        base_url: `https://${await h.random()}.com`,
         client_id: await h.random(),
         client_secret: await h.random(),
       }});
