@@ -157,7 +157,7 @@ const conforms = function ( resources ) {
 
 const partialEqual = function ( A, B, list ) {
   for ( const item of list ) {
-    assert.equal( A[item], B[item] );
+    assert.deepEqual( A[item], B[item] );
   }
 }
 

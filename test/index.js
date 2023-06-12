@@ -9,7 +9,7 @@ import * as identity from "./identity/index.js";
 import * as person from "./person/index.js";
 import * as registration from "./registration/index.js";
 import * as mastodonClient from "./mastodon-client/index.js";
-import * as filter from "./filter/index.js";
+import * as lens from "./lens/index.js";
 import * as source from "./source/index.js";
 import * as post from "./post/index.js";
 import * as action from "./action/index.js";
@@ -35,7 +35,7 @@ import * as action from "./action/index.js";
       await h.test( "Identity", await identity.crud( $ ) ),
       await h.test( "Registration", await registration.crud( $ ) ),
       await h.test( "Mastodon Client", await mastodonClient.crud( $ ) ),
-      await h.test( "Filter", await filter.crud( $ ) ),
+      await h.test( "Lens", await lens.crud( $ ) ),
       await h.test( "Source", await source.crud( $ ) ),
       await h.test( "Post", await post.crud( $ ) )
     ]),
@@ -44,8 +44,9 @@ import * as action from "./action/index.js";
       await h.test( "Onboard Identity", await action.onboardIdentity( $ ) )
     ]),
 
-    await h.test( "Resources", [
-      await h.test( "Identity", await identity.resource( $ ) ),
+    await h.test( "Person Resources", [
+      await h.test( "Identity", await identity.person( $ ) ),
+      await h.test( "Lens", await lens.person( $ ) ),
     ])
 
   ]));
