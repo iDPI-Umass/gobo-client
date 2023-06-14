@@ -6,12 +6,14 @@ const crud = async function ( $ ) {
 
     await h.test( "create source", h.target( "source-crud", async () => {
       source = await $.gobo.sources.post({ content: {
+        platform_id: await h.random(),
         base_url: "https://twitter.com",
         url: await h.random(),
         username: await h.random(),
         name: "David Test",
         icon_url: await h.random(),
-        active: false
+        active: false,
+        last_retrieved: h.now()
       }});
 
       $.conforms( "sources", "post", source );
@@ -21,12 +23,14 @@ const crud = async function ( $ ) {
       await h.fail( 409, async function () {
         return await $.gobo.sources.post({
           content: {
+            platform_id: await h.random(),
             base_url: "https://twitter.com",
             url: source.url,
             username: await h.random(),
             name: "David Test",
             icon_url: await h.random(),
-            active: false
+            active: false,
+            last_retrieved: h.now()
           }
         });
       });
@@ -50,12 +54,14 @@ const crud = async function ( $ ) {
 
       h.partialEqual( _source, source, [
         "id",
+        "platform_id",
         "base_url",
         "url",
         "username",
         "name",
         "icon_url",
         "active",
+        "last_retrieved",
         "created"
       ]);
 

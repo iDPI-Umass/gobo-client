@@ -13,6 +13,7 @@ import * as lens from "./lens/index.js";
 import * as source from "./source/index.js";
 import * as post from "./post/index.js";
 import * as action from "./action/index.js";
+import * as task from "./task/index.js";
 
 
 (async function () {
@@ -37,7 +38,8 @@ import * as action from "./action/index.js";
       await h.test( "Mastodon Client", await mastodonClient.crud( $ ) ),
       await h.test( "Lens", await lens.crud( $ ) ),
       await h.test( "Source", await source.crud( $ ) ),
-      await h.test( "Post", await post.crud( $ ) )
+      await h.test( "Post", await post.crud( $ ) ),
+      await h.test( "Task", await task.crud( $ ) )
     ]),
 
     await h.test( "Actions", [
