@@ -46,6 +46,10 @@ import * as task from "./task/index.js";
       await h.test( "Onboard Identity", await action.onboardIdentity( $ ) )
     ]),
 
+    await h.test( "Tasks", [
+      await h.test( "Basic Pipeline Submissions", await task.basic( $ ) )
+    ]),
+
     await h.test( "Person Resources", [
       await h.test( "Identity", await identity.person( $ ) ),
       await h.test( "Lens", await lens.person( $ ) ),
