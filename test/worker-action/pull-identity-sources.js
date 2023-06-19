@@ -9,8 +9,6 @@ const pullIdentitySources = async function ( $ ) {
         profile_url: "https://twitter.com/davidgobo1"
       }});
       
-      console.log(result);
-
       $.conforms( "action_pull_identity_sources", "post", result );
     })),
 

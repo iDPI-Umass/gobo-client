@@ -12,8 +12,7 @@ const crud = async function ( $ ) {
         username: await h.random(),
         name: "David Test",
         icon_url: await h.random(),
-        active: false,
-        last_retrieved: h.now()
+        active: false
       }});
 
       $.conforms( "sources", "post", source );
@@ -29,8 +28,7 @@ const crud = async function ( $ ) {
             username: await h.random(),
             name: "David Test",
             icon_url: await h.random(),
-            active: false,
-            last_retrieved: h.now()
+            active: false
           }
         });
       });
@@ -61,7 +59,6 @@ const crud = async function ( $ ) {
         "name",
         "icon_url",
         "active",
-        "last_retrieved",
         "created"
       ]);
 
