@@ -13,7 +13,9 @@ import * as lens from "./lens/index.js";
 import * as source from "./source/index.js";
 import * as post from "./post/index.js";
 import * as action from "./action/index.js";
+import * as workerAction from "./worker-action/index.js";
 import * as task from "./task/index.js";
+import * as feed from "./feed/index.js";
 
 
 (async function () {
@@ -43,7 +45,8 @@ import * as task from "./task/index.js";
     ]),
 
     await h.test( "Actions", [
-      await h.test( "Onboard Identity", await action.onboardIdentity( $ ) )
+      await h.test( "Onboard Identity", await action.onboardIdentity( $ ) ),
+      await h.test( "Identity Sources", await workerAction.pullIdentitySources( $ ) ),
     ]),
 
     await h.test( "Tasks", [
@@ -53,6 +56,7 @@ import * as task from "./task/index.js";
     await h.test( "Person Resources", [
       await h.test( "Identity", await identity.person( $ ) ),
       await h.test( "Lens", await lens.person( $ ) ),
+      await h.test( "Feeds", await feed.person( $ ) )
     ])
 
   ]));
