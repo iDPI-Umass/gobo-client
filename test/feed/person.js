@@ -13,7 +13,7 @@ const testGroup = async function ( $ ) {
       });
 
       $.conforms( "person_feed", "get", fullFeed );
-      h.assert.equal( 25, fullFeed.length );
+      h.assert.equal( 25, fullFeed.posts.length );
     })),  
 
     await h.test( "paginate chronological feed", h.target( "feed-person", async () => {
@@ -25,9 +25,9 @@ const testGroup = async function ( $ ) {
       });
 
       $.conforms( "person_feed", "get", feed );
-      h.assert.equal( 25, feed.length );
-      const _fullFeed = fullFeed.map( post => post.id );
-      const _feed = feed.map( post => post.id );
+      h.assert.equal( 25, feed.posts.length );
+      const _fullFeed = fullFeed.posts.map( post => post.id );
+      const _feed = feed.posts.map( post => post.id );
       for ( const id of _feed ) {
         h.assert(!_fullFeed.includes(id));
       }

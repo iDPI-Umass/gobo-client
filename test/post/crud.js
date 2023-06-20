@@ -7,13 +7,14 @@ const crud = async function ( $ ) {
     await h.test( "create post", h.target( "post-crud", async () => {
       post = await $.gobo.posts.post({ content: {
         "source_id": 1,
+        "author_id": 1,
         "base_url": "https://twitter.com",
         "platform_id": await h.random(),
         "title": "Post Title",
         "content": "Content Test",
-        "author": "David Test",
         "url": await h.random(),
-        "visibility": "public"
+        "visibility": "public",
+        "published": h.now()
       }});
 
       $.conforms( "posts", "post", post );
@@ -38,13 +39,14 @@ const crud = async function ( $ ) {
       h.partialEqual( _post, post, [
         "id",
         "source_id",
+        "author_id",
         "base_url",
         "platform_id",
         "title",
         "content",
-        "author",
         "url",
         "visibility",
+        "published",
         "created"
       ]);
 
