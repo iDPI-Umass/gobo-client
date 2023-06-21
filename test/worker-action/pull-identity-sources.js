@@ -12,6 +12,14 @@ const pullIdentitySources = async function ( $ ) {
       $.conforms( "action_pull_identity_sources", "post", result );
     })),
 
+    await h.test( "reddit identity", h.target( "action-pull-identity-sources", async () => {
+      const result = await $.gobo.actionPullIdentitySources.post({ content: {
+        profile_url: "https://www.reddit.com/user/davidgobo"
+      }});
+      
+      $.conforms( "action_pull_identity_sources", "post", result );
+    })),
+
   ];
 };
 
