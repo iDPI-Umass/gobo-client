@@ -12,3 +12,9 @@ client-test:
           type: prompt
         - name: password
           type: prompt
+
+client-task-development:
+  namespace: gobo
+  gobo:
+    base: http://localhost:4242
+    debug: 1

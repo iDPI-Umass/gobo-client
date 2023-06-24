@@ -27,7 +27,10 @@ const removeSecret = async function () {
 };
 
 
-
+const workbench = async function () {
+  const config = await Task.Environment.check();
+  await Task.Workbench.run( config );
+}
 
 
 
@@ -36,5 +39,7 @@ export {
   putSecret,
   putSecrets,
   getSecret,
-  removeSecret
+  removeSecret,
+
+  workbench
 }
