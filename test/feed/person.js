@@ -3,33 +3,35 @@ import * as Value from "@dashkite/joy/value";
 const testGroup = async function ( $ ) {
   const { h } = $;
   const person = await $.gobo.me.get();
-  let fullFeed;
+  const identities = await $.gobo.personIdentities.get({
+    person_id: person.id
+  });
+  let feed;
+  let start;
 
   return [
 
     await h.test( "chronological feed", h.target( "feed-person", async () => {
-      fullFeed = await $.gobo.personFeed.get({
+      feed = await $.gobo.personIdentityFeed.get({
         person_id: person.id,
+        id: identities[0].id
       });
 
-      $.conforms( "person_feed", "get", fullFeed );
-      h.assert.equal( 25, fullFeed.posts.length );
+      $.conforms( "person_identity_feed", "get", feed );
+      h.assert.equal( 25, feed.feed.length );
     })),  
 
     await h.test( "paginate chronological feed", h.target( "feed-person", async () => {
-      const feed = await $.gobo.personFeed.get({
+      const page2 = await $.gobo.personIdentityFeed.get({
         person_id: person.id,
-        view: "full",
-        page: 2,
-        per_page: 25
+        id: identities[0].id,
+        start: feed.next
       });
 
-      $.conforms( "person_feed", "get", feed );
-      h.assert.equal( 25, feed.posts.length );
-      const _fullFeed = fullFeed.posts.map( post => post.id );
-      const _feed = feed.posts.map( post => post.id );
-      for ( const id of _feed ) {
-        h.assert(!_fullFeed.includes(id));
+      $.conforms( "person_identity_feed", "get", feed );
+      h.assert.equal( 25, page2.feed.length );
+      for ( const id of page2.feed ) {
+        h.assert(!feed.feed.includes(id));
       }
     })),
 
