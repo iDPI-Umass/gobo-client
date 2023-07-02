@@ -12,7 +12,7 @@ const getFlag = function ( name, config ) {
 
 const getToken = async function () {
   const response = await fetch(
-    "https://dev-j72vlrggk1ft8e8u.us.auth0.com/oauth/token", {
+    "https://auth.gobo.social/oauth/token", {
     method: "POST",
     headers: { 
       "content-type": "application/json"

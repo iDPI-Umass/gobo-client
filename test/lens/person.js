@@ -2,12 +2,12 @@ import * as Value from "@dashkite/joy/value";
 
 const testGroup = async function ( $ ) {
   const { h } = $;
-  const person = await $.gobo.me.get();
-  let lens = null;
+  let person, lens;
 
   return [
 
     await h.test( "add lenses", h.target( "lens-person", async () => {
+      person = await $.gobo.me.get();
       lens = await $.gobo.personLenses.post({
         parameters: {
           person_id: person.id
@@ -15,6 +15,7 @@ const testGroup = async function ( $ ) {
         content: {
           person_id: person.id,
           category: "block",
+          active: true,
           configuration: {
             type: "keyword",
             value: "example phrase"
@@ -43,6 +44,7 @@ const testGroup = async function ( $ ) {
       h.partialEqual( _lens, lens, [
         "id",
         "category",
+        "active",
         "configuration",
         "created"
       ]);

@@ -9,6 +9,12 @@ const setToken = function ( options ) {
   };
 };
 
+const setProfile = function ( options ) {
+  return function ( profile ) {
+    options.profile = profile;
+  };
+};
+
 const assemble = function ( resources, options ) {
   return new Proxy( {}, {
     get: function ( target, name ) {
@@ -18,8 +24,12 @@ const assemble = function ( resources, options ) {
         return;
       } else if ( name === "spec") {
         return resources;
-      } else if ( name === "setToken" ) {
+      } else if ( name === "set_token" ) {
         return setToken( options );
+      } else if ( name === "set_profile" ) {
+        return setProfile( options );
+      } else if ( name === "id" ) {
+        return options.profile?.id;
       } else if ( resources[ name ] == null ) {
         throw new Error( `resource [ ${ name } ] is not defined` );
       } else {

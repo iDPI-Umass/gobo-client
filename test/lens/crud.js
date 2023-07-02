@@ -8,6 +8,7 @@ const crud = async function ( $ ) {
       lens = await $.gobo.lenses.post({ content: {
         person_id: 1,
         category: "block",
+        active: true,
         configuration: {
           type: "keyword",
           value: "example phrase"
@@ -36,6 +37,7 @@ const crud = async function ( $ ) {
       h.partialEqual( _lens, lens, [
         "id",
         "category",
+        "active",
         "configuration",
         "created"
       ]);

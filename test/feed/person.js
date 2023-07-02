@@ -2,20 +2,23 @@ import * as Value from "@dashkite/joy/value";
 
 const testGroup = async function ( $ ) {
   const { h } = $;
-  const person = await $.gobo.me.get();
-  const identities = await $.gobo.personIdentities.get({
-    person_id: person.id
-  });
-  let feed;
-  let start;
+  let person, identities, feed;
+ 
 
   return [
 
     await h.test( "chronological feed", h.target( "feed-person", async () => {
+      person = await $.gobo.me.get();
+      identities = await $.gobo.personIdentities.get({
+        person_id: person.id
+      });
+
       feed = await $.gobo.personIdentityFeed.get({
         person_id: person.id,
         id: identities[0].id
       });
+
+      console.log(feed);
 
       $.conforms( "person_identity_feed", "get", feed );
       h.assert.equal( 25, feed.feed.length );

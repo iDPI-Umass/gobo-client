@@ -1,13 +1,13 @@
 import { getGOBO } from "./helpers.js";
 
-const run = async function (config) {
-  const gobo = await getGOBO(config);
-  const result = await gobo.actionWorkbench.post({ content: {
-    profile_url: "https://twitter.com/davidgobo1"
-  }});
+// const run = async function (config) {
+//   const gobo = await getGOBO(config);
+//   const result = await gobo.actionWorkbench.post({ content: {
+//     profile_url: "https://twitter.com/davidgobo1"
+//   }});
 
-  console.log(result);
-};
+//   console.log(result);
+// };
 
 
 // const run = async function (config) {
@@ -48,6 +48,17 @@ const run = async function (config) {
   
 //   console.log(result);
 // };
+
+const run = async function (config) {
+  const gobo = await getGOBO(config);
+  const result = await gobo.tasks.post({ content: {
+    queue: "database",
+    name: "rebuild feed",
+    details: { person_id: 3 }
+  }});
+
+  console.log(result);
+};
 
 
 
