@@ -51,10 +51,12 @@ import { getGOBO } from "./helpers.js";
 
 const run = async function (config) {
   const gobo = await getGOBO(config);
+  const identity = await gobo.identity.get({id: 61})
+
   const result = await gobo.tasks.post({ content: {
-    queue: "database",
-    name: "rebuild feed",
-    details: { person_id: 3 }
+    queue: "reddit",
+    name: "pull sources",
+    details: { identity }
   }});
 
   console.log(result);
