@@ -54,9 +54,9 @@ const run = async function (config) {
   const identity = await gobo.identity.get({id: 61})
 
   const result = await gobo.tasks.post({ content: {
-    queue: "reddit",
-    name: "pull sources",
-    details: { identity }
+    queue: "database",
+    name: "workbench",
+    details: {}
   }});
 
   console.log(result);
