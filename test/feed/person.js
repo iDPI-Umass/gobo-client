@@ -15,7 +15,7 @@ const testGroup = async function ( $ ) {
 
       feed = await $.gobo.personIdentityFeed.get({
         person_id: person.id,
-        id: identities[1].id
+        id: identities[0].id
       });
 
       $.conforms( "person_identity_feed", "get", feed );

@@ -49,17 +49,34 @@ import { getGOBO } from "./helpers.js";
 //   console.log(result);
 // };
 
+// const run = async function (config) {
+//   const gobo = await getGOBO(config);
+//   const identity = await gobo.identity.get({id: 61})
+
+//   const result = await gobo.tasks.post({ content: {
+//     queue: "database",
+//     name: "workbench",
+//     details: {}
+//   }});
+
+//   console.log(result);
+// };
+
+
 const run = async function (config) {
   const gobo = await getGOBO(config);
-  const identity = await gobo.identity.get({id: 61})
 
-  const result = await gobo.tasks.post({ content: {
-    queue: "database",
-    name: "workbench",
+  await gobo.tasks.post({ content: {
+    queue: "reddit",
+    name: "identity follow fanout",
     details: {}
   }});
 
-  console.log(result);
+  await gobo.tasks.post({ content: {
+    queue: "mastodon",
+    name: "identity follow fanout",
+    details: {}
+  }});
 };
 
 

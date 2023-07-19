@@ -2,3 +2,8 @@ development:
   gobo:
     base: http://localhost:4242
     debug: 1
+
+production:
+  gobo:
+    base: https://api.gobo.social
+    debug: 1

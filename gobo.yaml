@@ -18,3 +18,9 @@ client-task-development:
   gobo:
     base: http://localhost:4242
     debug: 1
+
+client-task-production:
+  namespace: gobo
+  gobo:
+    base: https://api.gobo.social
+    debug: 1
