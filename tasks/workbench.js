@@ -80,7 +80,28 @@ const tasks = {
       name: "clear all last retrieved",
       details: {}
     }});
-  }
+  },
+
+  cleanFollows: async function (config) {
+    const gobo = await getGOBO(config);
+
+    await gobo.tasks.post({ content: {
+      queue: "database",
+      name: "clean follows",
+      details: {}
+    }});
+  },
+
+
+  redditReadSources: async function (config) {
+    const gobo = await getGOBO(config);
+  
+    await gobo.tasks.post({ content: {
+      queue: "reddit",
+      name: "read sources",
+      details: {}
+    }});
+  },
 };
 
 
