@@ -102,6 +102,73 @@ const tasks = {
       details: {}
     }});
   },
+
+  escapeTitles: async function (config) {
+    const gobo = await getGOBO(config);
+  
+    await gobo.tasks.post({ content: {
+      queue: "database",
+      name: "escape titles",
+      details: {}
+    }});
+  },
+
+
+
+  allIdentityFollowFanout: async function (config) {
+    const gobo = await getGOBO(config);
+
+    await gobo.tasks.post({ content: {
+      queue: "bluesky",
+      name: "identity follow fanout",
+      details: {}
+    }});
+
+    await gobo.tasks.post({ content: {
+      queue: "reddit",
+      name: "identity follow fanout",
+      details: {}
+    }});
+
+    await gobo.tasks.post({ content: {
+      queue: "mastodon",
+      name: "identity follow fanout",
+      details: {}
+    }});
+  },
+
+  allReadSources: async function (config) {
+    const gobo = await getGOBO(config);
+
+    await gobo.tasks.post({ content: {
+      queue: "bluesky",
+      name: "read sources",
+      details: {}
+    }});
+
+    await gobo.tasks.post({ content: {
+      queue: "reddit",
+      name: "read sources",
+      details: {}
+    }});
+
+    await gobo.tasks.post({ content: {
+      queue: "mastodon",
+      name: "read sources",
+      details: {}
+    }});
+  },
+
+
+  blueskyResetFeeds: async function (config) {
+    const gobo = await getGOBO(config);
+
+    await gobo.tasks.post({ content: {
+      queue: "bluesky",
+      name: "clear all last retrieved",
+      details: {}
+    }});
+  },
 };
 
 
