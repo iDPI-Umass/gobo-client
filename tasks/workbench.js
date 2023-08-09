@@ -17,6 +17,52 @@ const run = async function ( config ) {
 
 
 const tasks = {
+  blueskyWorkbench: async function (config) {
+    const gobo = await getGOBO(config);
+
+    await gobo.tasks.post({ content: {
+      queue: "bluesky",
+      name: "workbench",
+      details: { url: config.args.url }
+    }});
+  },
+
+  blueskyResetFeeds: async function (config) {
+    const gobo = await getGOBO(config);
+
+    await gobo.tasks.post({ content: {
+      queue: "bluesky",
+      name: "clear all last retrieved",
+      details: {}
+    }});
+  },
+
+  blueskyResetFeed: async function (config) {
+    if ( config.args.url == null ) {
+      throw new Error("must specify argument 'url' to target source");
+    }
+
+    const { url } = config.args;
+    const gobo = await getGOBO(config);
+
+    await gobo.tasks.post({ content: {
+      queue: "bluesky",
+      name: "clear last retrieved",
+      details: { url }
+    }});
+  },
+
+  blueskyHardReset: async function (config) {
+    const gobo = await getGOBO(config);
+
+    await gobo.tasks.post({ content: {
+      queue: "bluesky",
+      name: "hard reset posts",
+      details: {}
+    }});
+  },
+
+
   mastodonIdentityFollowFanout: async function (config) {
     const gobo = await getGOBO(config);
 
@@ -57,7 +103,7 @@ const tasks = {
     }});
   },
 
-  mastodonResetSingleFeed: async function (config) {
+  mastodonResetFeed: async function (config) {
     if ( config.args.url == null ) {
       throw new Error("must specify argument 'url' to target source");
     }
@@ -82,16 +128,15 @@ const tasks = {
     }});
   },
 
-  cleanFollows: async function (config) {
+  mastodonHardReset: async function (config) {
     const gobo = await getGOBO(config);
 
     await gobo.tasks.post({ content: {
-      queue: "database",
-      name: "clean follows",
+      queue: "mastodon",
+      name: "hard reset posts",
       details: {}
     }});
   },
-
 
   redditReadSources: async function (config) {
     const gobo = await getGOBO(config);
@@ -103,12 +148,32 @@ const tasks = {
     }});
   },
 
+  redditResetFeeds: async function (config) {
+    const gobo = await getGOBO(config);
+
+    await gobo.tasks.post({ content: {
+      queue: "reddit",
+      name: "clear all last retrieved",
+      details: {}
+    }});
+  },
+
   escapeTitles: async function (config) {
     const gobo = await getGOBO(config);
   
     await gobo.tasks.post({ content: {
       queue: "database",
       name: "escape titles",
+      details: {}
+    }});
+  },
+
+  cleanFollows: async function (config) {
+    const gobo = await getGOBO(config);
+
+    await gobo.tasks.post({ content: {
+      queue: "database",
+      name: "clean follows",
       details: {}
     }});
   },
@@ -159,8 +224,7 @@ const tasks = {
     }});
   },
 
-
-  blueskyResetFeeds: async function (config) {
+  allResetFeeds: async function (config) {
     const gobo = await getGOBO(config);
 
     await gobo.tasks.post({ content: {
@@ -168,7 +232,22 @@ const tasks = {
       name: "clear all last retrieved",
       details: {}
     }});
+
+    await gobo.tasks.post({ content: {
+      queue: "mastodon",
+      name: "clear all last retrieved",
+      details: {}
+    }});
+
+    await gobo.tasks.post({ content: {
+      queue: "reddit",
+      name: "clear all last retrieved",
+      details: {}
+    }});
   },
+
+
+
 };
 
 

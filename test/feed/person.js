@@ -15,8 +15,10 @@ const testGroup = async function ( $ ) {
 
       feed = await $.gobo.personIdentityFeed.get({
         person_id: person.id,
-        id: identities[0].id
+        id: identities[1].id
       });
+
+      console.log(feed);
 
       $.conforms( "person_identity_feed", "get", feed );
       h.assert.equal( 25, feed.feed.length );
@@ -31,7 +33,7 @@ const testGroup = async function ( $ ) {
     await h.test( "paginate chronological feed", h.target( "feed-person", async () => {
       const page2 = await $.gobo.personIdentityFeed.get({
         person_id: person.id,
-        id: identities[0].id,
+        id: identities[1].id,
         start: feed.next
       });
 
