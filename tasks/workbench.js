@@ -1,5 +1,9 @@
 import { getGOBO } from "./helpers.js";
 
+const BLUESKY_URL = "https://bsky.app"
+const REDDIT_URL = "https://www.reddit.com"
+
+
 const run = async function ( config ) {
   const taskName = config.args.task;
   if ( taskName == null ) {
@@ -59,6 +63,33 @@ const tasks = {
       queue: "bluesky",
       name: "hard reset posts",
       details: {}
+    }});
+  },
+
+  blueskyCreatePost: async function (config) {
+    const gobo = await getGOBO(config);
+    const person = await gobo.me.get();
+    const identities = await gobo.personIdentities.get({
+      person_id: person.id
+    });
+
+    const identity = identities.find( i => i.base_url === BLUESKY_URL );
+    if ( identity == null ) {
+      throw new Error("unable to find bluesky identity to run test");
+    }
+
+    await gobo.personPosts.post({ 
+      parameters: {
+        person_id: person.id
+      },
+      content: {
+        post: {
+          content: "This is a test post from GOBO."
+        },
+        targets: [{
+          identity: identity.id,
+          metadata: {}
+        }]
     }});
   },
 
@@ -138,6 +169,34 @@ const tasks = {
     }});
   },
 
+  mastodonCreatePost: async function (config) {
+    const gobo = await getGOBO(config);
+    const person = await gobo.me.get();
+    const identities = await gobo.personIdentities.get({
+      person_id: person.id
+    });
+
+    const identity = identities.find( i => ! [BLUESKY_URL, REDDIT_URL].includes(i.base_url) );
+    if ( identity == null ) {
+      throw new Error("unable to find mastodon identity to run test");
+    }
+
+    await gobo.personPosts.post({ 
+      parameters: {
+        person_id: person.id
+      },
+      content: {
+        post: {
+          content: "This is a test post from GOBO."
+        },
+        targets: [{
+          identity: identity.id,
+          metadata: {}
+        }]
+    }});
+  },
+
+
   redditReadSources: async function (config) {
     const gobo = await getGOBO(config);
   
@@ -155,6 +214,36 @@ const tasks = {
       queue: "reddit",
       name: "clear all last retrieved",
       details: {}
+    }});
+  },
+
+  redditCreatePost: async function (config) {
+    const gobo = await getGOBO(config);
+    const person = await gobo.me.get();
+    const identities = await gobo.personIdentities.get({
+      person_id: person.id
+    });
+
+    const identity = identities.find( i => i.base_url === REDDIT_URL );
+    if ( identity == null ) {
+      throw new Error("unable to find mastodon identity to run test");
+    }
+
+    await gobo.personPosts.post({ 
+      parameters: {
+        person_id: person.id
+      },
+      content: {
+        post: {
+          title: "GOBO Test",
+          content: "This is a test post from GOBO."
+        },
+        targets: [{
+          identity: identity.id,
+          metadata: {
+            subreddit: "gobotest"
+          }
+        }]
     }});
   },
 
