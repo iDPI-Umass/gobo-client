@@ -17,6 +17,7 @@ import * as workerAction from "./worker-action/index.js";
 import * as task from "./task/index.js";
 import * as feed from "./feed/index.js";
 import * as store from "./store/index.js";
+import * as image from "./image/index.js";
 
 
 (async function () {
@@ -58,7 +59,8 @@ import * as store from "./store/index.js";
       await h.test( "Store", await store.person( $ ) ),
       await h.test( "Identity", await identity.person( $ ) ),
       await h.test( "Lens", await lens.person( $ ) ),
-      await h.test( "Feeds", await feed.person( $ ) )
+      await h.test( "Feeds", await feed.person( $ ) ),
+      await h.test( "Draft Images", await image.person( $ ) )
     ])
 
   ]));
