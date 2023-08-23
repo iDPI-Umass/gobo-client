@@ -14,7 +14,7 @@ const testGroup = async function ( $ ) {
       
       const form = new FormData();
       const file = await FS.readFile( "test/image/test.jpg" );
-      form.append("image", file, { filename: "canyon.jpg" });
+      form.append("image", file, { filename: "canyon" });
       form.append("name", "starry canyon");
       form.append("alt", "This is a starry canyon");
 

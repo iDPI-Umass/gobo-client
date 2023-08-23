@@ -1,3 +1,5 @@
+import FS from "node:fs/promises";
+import FormData from "form-data";
 import { getGOBO } from "./helpers.js";
 
 const BLUESKY_URL = "https://bsky.app"
@@ -85,6 +87,50 @@ const tasks = {
       content: {
         post: {
           content: "This is a test post from GOBO."
+        },
+        targets: [{
+          identity: identity.id,
+          metadata: {}
+        }]
+    }});
+  },
+
+  blueskyMediaPost: async function (config) {
+    const gobo = await getGOBO(config);
+    const person = await gobo.me.get();
+
+    const form = new FormData();
+    const file = await FS.readFile( "test/image/test.jpg" );
+    form.append("image", file, { filename: "canyon" });
+    form.append("name", "starry canyon");
+    form.append("alt", "This is a starry canyon");
+
+    const draft = await gobo.personDraftImages.post({
+      parameters: { person_id: person.id },
+      content: form,
+    }, {
+      headers: {
+        "Content-Type": `multipart/form-data; boundary=${form.getBoundary()}`
+      }
+    });
+
+    const identities = await gobo.personIdentities.get({
+      person_id: person.id
+    });
+
+    const identity = identities.find( i => i.base_url === BLUESKY_URL );
+    if ( identity == null ) {
+      throw new Error("unable to find bluesky identity to run test");
+    }
+
+    await gobo.personPosts.post({ 
+      parameters: {
+        person_id: person.id
+      },
+      content: {
+        post: {
+          content: "This is a test post from GOBO.",
+          attachments: [ draft.id ]
         },
         targets: [{
           identity: identity.id,
@@ -196,6 +242,50 @@ const tasks = {
     }});
   },
 
+  mastodonMediaPost: async function (config) {
+    const gobo = await getGOBO(config);
+    const person = await gobo.me.get();
+
+    const form = new FormData();
+    const file = await FS.readFile( "test/image/test.jpg" );
+    form.append("image", file, { filename: "canyon" });
+    form.append("name", "starry canyon");
+    form.append("alt", "This is a starry canyon");
+
+    const draft = await gobo.personDraftImages.post({
+      parameters: { person_id: person.id },
+      content: form,
+    }, {
+      headers: {
+        "Content-Type": `multipart/form-data; boundary=${form.getBoundary()}`
+      }
+    });
+
+    const identities = await gobo.personIdentities.get({
+      person_id: person.id
+    });
+
+    const identity = identities.find( i => ! [BLUESKY_URL, REDDIT_URL].includes(i.base_url) );
+    if ( identity == null ) {
+      throw new Error("unable to find mastodon identity to run test");
+    }
+
+    await gobo.personPosts.post({ 
+      parameters: {
+        person_id: person.id
+      },
+      content: {
+        post: {
+          content: "This is a test post from GOBO.",
+          attachments: [ draft.id ]
+        },
+        targets: [{
+          identity: identity.id,
+          metadata: {}
+        }]
+    }});
+  },
+
 
   redditReadSources: async function (config) {
     const gobo = await getGOBO(config);
@@ -246,6 +336,72 @@ const tasks = {
         }]
     }});
   },
+
+  redditMediaPost: async function (config) {
+    const gobo = await getGOBO(config);
+    const person = await gobo.me.get();
+
+    let form = new FormData();
+    let file = await FS.readFile( "test/image/test.jpg" );
+    form.append("image", file, { filename: "canyon" });
+    form.append("name", "starry canyon");
+    form.append("alt", "This is a starry canyon");
+
+    const draft = await gobo.personDraftImages.post({
+      parameters: { person_id: person.id },
+      content: form,
+    }, {
+      headers: {
+        "Content-Type": `multipart/form-data; boundary=${form.getBoundary()}`
+      }
+    });
+
+    // form = new FormData();
+    // file = await FS.readFile( "test/image/test.jpg" );
+    // form.append("image", file, { filename: "canyon" });
+    // form.append("name", "starry canyon");
+    // form.append("alt", "This is a starry canyon");
+
+    // const draft2 = await gobo.personDraftImages.post({
+    //   parameters: { person_id: person.id },
+    //   content: form,
+    // }, {
+    //   headers: {
+    //     "Content-Type": `multipart/form-data; boundary=${form.getBoundary()}`
+    //   }
+    // });
+
+
+
+    const identities = await gobo.personIdentities.get({
+      person_id: person.id
+    });
+
+    const identity = identities.find( i => i.base_url === REDDIT_URL );
+    if ( identity == null ) {
+      throw new Error("unable to find mastodon identity to run test");
+    }
+
+    await gobo.personPosts.post({ 
+      parameters: {
+        person_id: person.id
+      },
+      content: {
+        post: {
+          title: "GOBO Test",
+          content: "This is a test post from GOBO.",
+          attachments: [ draft.id ]
+          // attachments: [ draft.id, draft2.id ]
+        },
+        targets: [{
+          identity: identity.id,
+          metadata: {
+            subreddit: "gobotest"
+          }
+        }]
+    }});
+  },
+
 
   redditOnboardIdentity: async function (config) {
     const gobo = await getGOBO(config);
