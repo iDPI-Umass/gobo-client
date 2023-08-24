@@ -512,6 +512,17 @@ const tasks = {
   },
 
 
+  databaseWorkbench: async function (config) {
+    const gobo = await getGOBO(config);
+
+    await gobo.tasks.post({ content: {
+      queue: "database",
+      name: "workbench",
+      details: {}
+    }});
+  },
+
+
 
 };
 

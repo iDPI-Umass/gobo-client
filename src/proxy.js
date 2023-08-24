@@ -83,7 +83,7 @@ const createMethod = function ( context, name ) {
     }
     
     const defaultHeaders = {};
-    if ( request.type != null ) {
+    if ( request.type != null && request.type !== "multipart/form-data" ) {
       defaultHeaders[ "Content-Type" ] = request.type;
     }
     if ( response.type != null ) {
