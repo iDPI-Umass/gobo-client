@@ -307,6 +307,31 @@ const tasks = {
     }});
   },
 
+  redditResetFeed: async function (config) {
+    if ( config.args.url == null ) {
+      throw new Error("must specify argument 'url' to target source");
+    }
+
+    const { url } = config.args;
+    const gobo = await getGOBO(config);
+
+    await gobo.tasks.post({ content: {
+      queue: "reddit",
+      name: "clear last retrieved",
+      details: { url }
+    }});
+  },
+
+  redditHardReset: async function (config) {
+    const gobo = await getGOBO(config);
+
+    await gobo.tasks.post({ content: {
+      queue: "reddit",
+      name: "hard reset posts",
+      details: {}
+    }});
+  },
+
   redditCreatePost: async function (config) {
     const gobo = await getGOBO(config);
     const person = await gobo.me.get();
@@ -519,6 +544,171 @@ const tasks = {
       queue: "database",
       name: "workbench",
       details: {}
+    }});
+  },
+
+
+
+
+
+
+  // bluesky text post test: 87367
+  // bluesky identity: 201
+  // mastodon text post: 87375
+  // mastodon identity: 109
+  // reddit text post: 87377
+  // reddit identity: 61
+
+  testAddPostEdge: async function (config) {
+    const gobo = await getGOBO(config);
+    const person = await gobo.me.get();
+    const edge = await gobo.person_post_edges.post({
+      parameters: { person_id: person.id },
+      content: {
+        identity: 61,
+        post: 87377,
+        name: "upvote"
+      }
+    });
+
+    console.log(edge);
+  },
+
+  testRemovePostEdge: async function (config) {
+    const gobo = await getGOBO(config);
+    const person = await gobo.me.get();
+    await gobo.person_post_edge.delete({
+      person_id: person.id,
+      id: 7
+    });
+  },
+
+
+  testBlueskyQuote: async function (config) {
+    const gobo = await getGOBO(config);
+    const person = await gobo.me.get();
+
+    const identities = await gobo.personIdentities.get({
+      person_id: person.id
+    });
+  
+    const identity = identities.find( i => i.base_url === BLUESKY_URL );
+    if ( identity == null ) {
+      throw new Error("unable to find bluesky identity to run test");
+    }
+
+    const postGraph = await gobo.postGraph.get({ id: 87367 });
+    const quote = postGraph.posts.find( p => p.id === postGraph.feed[0] );
+      
+    await gobo.personPosts.post({ 
+      parameters: {
+        person_id: person.id
+      },
+      content: {
+        post: {
+          content: "This is a test quote post from GOBO."
+        },
+        targets: [{
+          identity: identity.id,
+          metadata: { quote }
+        }]
+    }});
+  },
+
+
+  testBlueskyReply: async function (config) {
+    const gobo = await getGOBO(config);
+    const person = await gobo.me.get();
+
+    const identities = await gobo.personIdentities.get({
+      person_id: person.id
+    });
+  
+    const identity = identities.find( i => i.base_url === BLUESKY_URL );
+    if ( identity == null ) {
+      throw new Error("unable to find bluesky identity to run test");
+    }
+
+    const postGraph = await gobo.postGraph.get({ id: 87367 });
+    const reply = postGraph.posts.find( p => p.id === postGraph.feed[0] );
+      
+    await gobo.personPosts.post({ 
+      parameters: {
+        person_id: person.id
+      },
+      content: {
+        post: {
+          content: "This is a test reply post from GOBO."
+        },
+        targets: [{
+          identity: identity.id,
+          metadata: { reply }
+        }]
+    }});
+  },
+
+
+  testMastodonReply: async function (config) {
+    const gobo = await getGOBO(config);
+    const person = await gobo.me.get();
+
+    const identities = await gobo.personIdentities.get({
+      person_id: person.id
+    });
+  
+    const identity = identities.find( i => ! [BLUESKY_URL, REDDIT_URL].includes(i.base_url) );
+    if ( identity == null ) {
+      throw new Error("unable to find mastodon identity to run test");
+    }
+
+    const postGraph = await gobo.postGraph.get({ id: 87375 });
+    const reply = postGraph.posts.find( p => p.id === postGraph.feed[0] );
+      
+    await gobo.personPosts.post({ 
+      parameters: {
+        person_id: person.id
+      },
+      content: {
+        post: {
+          content: "This is a test reply post from GOBO."
+        },
+        targets: [{
+          identity: identity.id,
+          metadata: { reply }
+        }]
+    }});
+  },
+
+
+
+  testRedditReply: async function (config) {
+    const gobo = await getGOBO(config);
+    const person = await gobo.me.get();
+
+    const identities = await gobo.personIdentities.get({
+      person_id: person.id
+    });
+  
+    const identity = identities.find( i => i.base_url === REDDIT_URL );
+    if ( identity == null ) {
+      throw new Error("unable to find bluesky identity to run test");
+    }
+
+    const postGraph = await gobo.postGraph.get({ id: 87377 });
+    const reply = postGraph.posts.find( p => p.id === postGraph.feed[0] );
+      
+    await gobo.personPosts.post({ 
+      parameters: {
+        person_id: person.id
+      },
+      content: {
+        post: {
+          content: "This is a test reply post from GOBO."
+        },
+        targets: [{
+          identity: identity.id,
+          metadata: { reply }
+        }]
     }});
   },
 
