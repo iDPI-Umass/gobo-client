@@ -25,9 +25,13 @@ const testGroup = async function ( $ ) {
     })), 
     
     await h.test( "single post graph", h.target( "feed-person", async () => {
-      const result = await $.gobo.postGraph.get({ id: feed.feed[0] });
+      const result = await $.gobo.personIdentityPost.get({
+        person_id: person.id,
+        identity_id: identities[1].id,
+        id: feed.feed[0] 
+      });
 
-      $.conforms( "post_graph", "get", result );
+      $.conforms( "person_identity_post", "get", result );
     })), 
 
     await h.test( "paginate chronological feed", h.target( "feed-person", async () => {

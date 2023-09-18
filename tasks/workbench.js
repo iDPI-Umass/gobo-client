@@ -33,6 +33,16 @@ const tasks = {
     }});
   },
 
+  blueskyReadSources: async function (config) {
+    const gobo = await getGOBO(config);
+  
+    await gobo.tasks.post({ content: {
+      queue: "bluesky",
+      name: "read sources",
+      details: {}
+    }});
+  },
+
   blueskyResetFeeds: async function (config) {
     const gobo = await getGOBO(config);
 
@@ -136,6 +146,26 @@ const tasks = {
           identity: identity.id,
           metadata: {}
         }]
+    }});
+  },
+
+  blueskyRefreshSessions: async function (config) {
+    const gobo = await getGOBO(config);
+
+    await gobo.tasks.post({ content: {
+      queue: "bluesky",
+      name: "refresh sessions",
+      details: {}
+    }});
+  },
+
+  blueskyBootstrapSessions: async function (config) {
+    const gobo = await getGOBO(config);
+
+    await gobo.tasks.post({ content: {
+      queue: "bluesky",
+      name: "bootstrap sessions",
+      details: {}
     }});
   },
 
@@ -710,6 +740,16 @@ const tasks = {
           metadata: { reply }
         }]
     }});
+  },
+
+
+  storeDelete: async function (config) {
+    const gobo = await getGOBO(config);
+
+    await gobo.personStore.delete({
+      person_id: 3,
+      name: "welcome"
+    });
   },
 
 
