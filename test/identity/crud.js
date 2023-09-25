@@ -7,7 +7,8 @@ const crud = async function ( $ ) {
     await h.test( "create identity", h.target( "identity-crud", async () => {
       identity = await $.gobo.identities.post({ content: {
         person_id: 1,
-        base_url: "https://twitter.com",
+        platform: "bluesky",
+        base_url: "https://bsky.app",
         profile_url: await h.random(),
         profile_image: "https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png",
         username: `davidgobo${ await h.random() }`,
@@ -23,7 +24,8 @@ const crud = async function ( $ ) {
       await h.fail( 409, async function () {
         return await $.gobo.identities.post({ content: {
           person_id: 1,
-          base_url: "https://twitter.com",
+          platform: "bluesky",
+          base_url: "https://bsky.app",
           profile_url: identity.profile_url,
           profile_image: "https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png",
           username: `davidgobo${ await h.random() }`,

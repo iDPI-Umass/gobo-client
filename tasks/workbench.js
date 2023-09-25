@@ -23,61 +23,62 @@ const run = async function ( config ) {
 
 
 const tasks = {
-  blueskyWorkbench: async function (config) {
-    const gobo = await getGOBO(config);
 
-    await gobo.tasks.post({ content: {
-      queue: "bluesky",
-      name: "workbench",
-      details: { url: config.args.url }
-    }});
-  },
-
-  blueskyReadSources: async function (config) {
+  pullSources: async function (config) {
     const gobo = await getGOBO(config);
+    const platform = config.args.platform ?? "all";
   
     await gobo.tasks.post({ content: {
-      queue: "bluesky",
-      name: "read sources",
-      details: {}
+      queue: "default",
+      name: "flow - pull sources",
+      details: { platform }
     }});
   },
 
-  blueskyResetFeeds: async function (config) {
+  pullPosts: async function (config) {
     const gobo = await getGOBO(config);
-
+    const platform = config.args.platform ?? "all";
+  
     await gobo.tasks.post({ content: {
-      queue: "bluesky",
-      name: "clear all last retrieved",
-      details: {}
+      queue: "default",
+      name: "flow - pull posts",
+      details: { platform }
     }});
   },
 
-  blueskyResetFeed: async function (config) {
-    if ( config.args.url == null ) {
-      throw new Error("must specify argument 'url' to target source");
-    }
-
-    const { url } = config.args;
+  hardReset: async function (config) {
     const gobo = await getGOBO(config);
-
+    const platform = config.args.platform ?? "all";
+  
     await gobo.tasks.post({ content: {
-      queue: "bluesky",
+      queue: "default",
+      name: "hard reset",
+      details: { platform }
+    }});
+  },
+
+  clearPosts: async function (config) {
+    const gobo = await getGOBO(config);
+    const platform = config.args.platform ?? "all";
+  
+    await gobo.tasks.post({ content: {
+      queue: "default",
+      name: "clear posts",
+      details: { platform }
+    }});
+  },
+
+  clearLastRetrieved: async function (config) {
+    const gobo = await getGOBO(config);
+    const platform = config.args.platform ?? "all";
+  
+    await gobo.tasks.post({ content: {
+      queue: "default",
       name: "clear last retrieved",
-      details: { url }
+      details: { platform }
     }});
   },
-
-  blueskyHardReset: async function (config) {
-    const gobo = await getGOBO(config);
-
-    await gobo.tasks.post({ content: {
-      queue: "bluesky",
-      name: "hard reset posts",
-      details: {}
-    }});
-  },
-
+  
   blueskyCreatePost: async function (config) {
     const gobo = await getGOBO(config);
     const person = await gobo.me.get();
@@ -153,97 +154,12 @@ const tasks = {
     const gobo = await getGOBO(config);
 
     await gobo.tasks.post({ content: {
-      queue: "bluesky",
-      name: "refresh sessions",
+      queue: "default",
+      name: "bluesky cycle sessions",
       details: {}
     }});
   },
 
-  blueskyBootstrapSessions: async function (config) {
-    const gobo = await getGOBO(config);
-
-    await gobo.tasks.post({ content: {
-      queue: "bluesky",
-      name: "bootstrap sessions",
-      details: {}
-    }});
-  },
-
-
-  mastodonIdentityFollowFanout: async function (config) {
-    const gobo = await getGOBO(config);
-
-    await gobo.tasks.post({ content: {
-      queue: "mastodon",
-      name: "identity follow fanout",
-      details: {}
-    }});
-  },
-
-  mastodonPullSources: async function (config) {
-    const gobo = await getGOBO(config);
-
-    if ( config.args.id == null ) {
-      throw new Error("must specify argument 'id' to target identity");
-    }
-    const id = Number( config.args.id );
-
-    const identity = await gobo.identity.get({ id });
-    if ( identity == null ) {
-      throw new Error("unable to find identity");
-    }
-
-    await gobo.tasks.post({ content: {
-      queue: "mastodon",
-      name: "pull sources",
-      details: { identity }
-    }});
-  },
-
-  mastodonReadSources: async function (config) {
-    const gobo = await getGOBO(config);
-  
-    await gobo.tasks.post({ content: {
-      queue: "mastodon",
-      name: "read sources",
-      details: {}
-    }});
-  },
-
-  mastodonResetFeed: async function (config) {
-    if ( config.args.url == null ) {
-      throw new Error("must specify argument 'url' to target source");
-    }
-
-    const { url } = config.args;
-    const gobo = await getGOBO(config);
-
-    await gobo.tasks.post({ content: {
-      queue: "mastodon",
-      name: "clear last retrieved",
-      details: { url }
-    }});
-  },
-
-  mastodonResetFeeds: async function (config) {
-    const gobo = await getGOBO(config);
-
-    await gobo.tasks.post({ content: {
-      queue: "mastodon",
-      name: "clear all last retrieved",
-      details: {}
-    }});
-  },
-
-  mastodonHardReset: async function (config) {
-    const gobo = await getGOBO(config);
-
-    await gobo.tasks.post({ content: {
-      queue: "mastodon",
-      name: "hard reset posts",
-      details: {}
-    }});
-  },
 
   mastodonCreatePost: async function (config) {
     const gobo = await getGOBO(config);
@@ -316,52 +232,7 @@ const tasks = {
     }});
   },
 
-
-  redditReadSources: async function (config) {
-    const gobo = await getGOBO(config);
   
-    await gobo.tasks.post({ content: {
-      queue: "reddit",
-      name: "read sources",
-      details: {}
-    }});
-  },
-
-  redditResetFeeds: async function (config) {
-    const gobo = await getGOBO(config);
-
-    await gobo.tasks.post({ content: {
-      queue: "reddit",
-      name: "clear all last retrieved",
-      details: {}
-    }});
-  },
-
-  redditResetFeed: async function (config) {
-    if ( config.args.url == null ) {
-      throw new Error("must specify argument 'url' to target source");
-    }
-
-    const { url } = config.args;
-    const gobo = await getGOBO(config);
-
-    await gobo.tasks.post({ content: {
-      queue: "reddit",
-      name: "clear last retrieved",
-      details: { url }
-    }});
-  },
-
-  redditHardReset: async function (config) {
-    const gobo = await getGOBO(config);
-
-    await gobo.tasks.post({ content: {
-      queue: "reddit",
-      name: "hard reset posts",
-      details: {}
-    }});
-  },
-
   redditCreatePost: async function (config) {
     const gobo = await getGOBO(config);
     const person = await gobo.me.get();
@@ -426,8 +297,6 @@ const tasks = {
     //   }
     // });
 
-
-
     const identities = await gobo.personIdentities.get({
       person_id: person.id
     });
@@ -456,130 +325,6 @@ const tasks = {
         }]
     }});
   },
-
-
-  redditOnboardIdentity: async function (config) {
-    const gobo = await getGOBO(config);
-    const result = await gobo.actionOnboardIdentityStart.post({ content: {
-      base_url: "https://www.reddit.com"
-    }});
-
-    console.log(result);
-  },
-
-  redditOnboardIdentityFinish: async function (config) {
-    const gobo = await getGOBO(config);
-    const result = await gobo.actionOnboardIdentityCallback.post({ content: {
-      base_url: "https://www.reddit.com",
-      state: "",
-      code: ""
-    }});
-      
-    console.log(result);
-  },
-
-  escapeTitles: async function (config) {
-    const gobo = await getGOBO(config);
-  
-    await gobo.tasks.post({ content: {
-      queue: "database",
-      name: "escape titles",
-      details: {}
-    }});
-  },
-
-  cleanFollows: async function (config) {
-    const gobo = await getGOBO(config);
-
-    await gobo.tasks.post({ content: {
-      queue: "database",
-      name: "clean follows",
-      details: {}
-    }});
-  },
-
-
-
-  allIdentityFollowFanout: async function (config) {
-    const gobo = await getGOBO(config);
-
-    await gobo.tasks.post({ content: {
-      queue: "bluesky",
-      name: "identity follow fanout",
-      details: {}
-    }});
-
-    await gobo.tasks.post({ content: {
-      queue: "reddit",
-      name: "identity follow fanout",
-      details: {}
-    }});
-
-    await gobo.tasks.post({ content: {
-      queue: "mastodon",
-      name: "identity follow fanout",
-      details: {}
-    }});
-  },
-
-  allReadSources: async function (config) {
-    const gobo = await getGOBO(config);
-
-    await gobo.tasks.post({ content: {
-      queue: "bluesky",
-      name: "read sources",
-      details: {}
-    }});
-
-    await gobo.tasks.post({ content: {
-      queue: "reddit",
-      name: "read sources",
-      details: {}
-    }});
-
-    await gobo.tasks.post({ content: {
-      queue: "mastodon",
-      name: "read sources",
-      details: {}
-    }});
-  },
-
-  allResetFeeds: async function (config) {
-    const gobo = await getGOBO(config);
-
-    await gobo.tasks.post({ content: {
-      queue: "bluesky",
-      name: "clear all last retrieved",
-      details: {}
-    }});
-
-    await gobo.tasks.post({ content: {
-      queue: "mastodon",
-      name: "clear all last retrieved",
-      details: {}
-    }});
-
-    await gobo.tasks.post({ content: {
-      queue: "reddit",
-      name: "clear all last retrieved",
-      details: {}
-    }});
-  },
-
-
-  databaseWorkbench: async function (config) {
-    const gobo = await getGOBO(config);
-
-    await gobo.tasks.post({ content: {
-      queue: "database",
-      name: "workbench",
-      details: {}
-    }});
-  },
-
-
-
-
 
 
   // bluesky text post test: 87367
@@ -752,7 +497,15 @@ const tasks = {
     });
   },
 
+  bootstrapPlatformLabels: async function (config) {
+    const gobo = await getGOBO(config);
 
+    await gobo.tasks.post({ content: {
+      queue: "default",
+      name: "bootstrap platform labels",
+      details: {}
+    }});
+  },
 
 };
 

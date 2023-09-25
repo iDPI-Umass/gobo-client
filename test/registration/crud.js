@@ -7,7 +7,8 @@ const crud = async function ( $ ) {
     await h.test( "create registration", h.target( "registration-crud", async () => {
       registration = await $.gobo.registrations.post({ content: {
         person_id: 1,
-        base_url: "https://twitter.com",
+        platform: "bluesky",
+        base_url: "https://bsky.app",
         oauth_token: await h.random(),
         oauth_token_secret: await h.random(),
         state: "current state"
@@ -35,6 +36,7 @@ const crud = async function ( $ ) {
       h.partialEqual( _registration, registration, [
         "id",
         "person_id",
+        "platform",
         "base_url",
         "oauth_token",
         "oauth_token_secret",

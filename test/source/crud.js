@@ -7,7 +7,8 @@ const crud = async function ( $ ) {
     await h.test( "create source", h.target( "source-crud", async () => {
       source = await $.gobo.sources.post({ content: {
         platform_id: await h.random(),
-        base_url: "https://twitter.com",
+        platform: "bluesky",
+        base_url: "https://bsky.app",
         url: await h.random(),
         username: await h.random(),
         name: "David Test",
@@ -23,7 +24,8 @@ const crud = async function ( $ ) {
         return await $.gobo.sources.post({
           content: {
             platform_id: await h.random(),
-            base_url: "https://twitter.com",
+            platform: "bluesky",
+            base_url: "https://bsky.app",
             url: source.url,
             username: await h.random(),
             name: "David Test",

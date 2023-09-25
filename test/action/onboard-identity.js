@@ -7,6 +7,7 @@ const onboardIdentity = async function ( $ ) {
 
     await h.test( "bluesky redirect", h.target( "action-onboard-identity", async () => {
       const result = await $.gobo.actionOnboardIdentityStart.post({ content: {
+        platform: "bluesky",
         base_url: "https://bsky.app"
       }});
       
@@ -32,6 +33,7 @@ const onboardIdentity = async function ( $ ) {
 
     await h.test( "reddit redirect", h.target( "action-onboard-identity", async () => {
       const result = await $.gobo.actionOnboardIdentityStart.post({ content: {
+        platform: "reddit",
         base_url: "https://www.reddit.com"
       }});
       
@@ -55,6 +57,7 @@ const onboardIdentity = async function ( $ ) {
 
     await h.test( "mastodon redirect", h.target( "action-onboard-identity", async () => {
       const result = await $.gobo.actionOnboardIdentityStart.post({ content: {
+        platform: "mastodon",
         base_url: "https://mastodon.social"
       }});
       

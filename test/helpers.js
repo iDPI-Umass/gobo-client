@@ -74,7 +74,7 @@ const targets = (function () {
 
 const doesMatch = function ( name ) {
   for ( const target of targets ) {
-    if ( target.startsWith(name) ) {
+    if ( name.startsWith(target) ) {
       return true;
     }
   }
