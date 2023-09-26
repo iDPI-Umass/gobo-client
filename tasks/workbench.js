@@ -30,7 +30,7 @@ const tasks = {
   
     await gobo.tasks.post({ content: {
       queue: "default",
-      name: "flow - pull sources",
+      name: "pull sources fanout",
       details: { platform }
     }});
   },
@@ -41,7 +41,7 @@ const tasks = {
   
     await gobo.tasks.post({ content: {
       queue: "default",
-      name: "flow - pull posts",
+      name: "pull posts fanout",
       details: { platform }
     }});
   },
@@ -76,6 +76,17 @@ const tasks = {
       queue: "default",
       name: "clear last retrieved",
       details: { platform }
+    }});
+  },
+
+
+  pruneResources: async function (config) {
+    const gobo = await getGOBO(config);
+  
+    await gobo.tasks.post({ content: {
+      queue: "default",
+      name: "prune resources",
+      details: {}
     }});
   },
   
