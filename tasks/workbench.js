@@ -24,6 +24,17 @@ const run = async function ( config ) {
 
 const tasks = {
 
+  customAction: async function (config) {
+    const gobo = await getGOBO(config);
+    const platform = config.args.platform ?? "all";
+  
+    await gobo.tasks.post({ content: {
+      queue: "default",
+      name: "workbench",
+      details: {}
+    }});
+  },
+
   pullSources: async function (config) {
     const gobo = await getGOBO(config);
     const platform = config.args.platform ?? "all";
@@ -87,6 +98,17 @@ const tasks = {
       queue: "default",
       name: "prune resources",
       details: {}
+    }});
+  },
+
+  onboardIdentity: async function (config) {
+    const gobo = await getGOBO(config);
+    const identity = await gobo.identity.get({ id: config.args.id });
+  
+    await gobo.tasks.post({ content: {
+      queue: "default",
+      name: "flow - onboard sources",
+      details: { identity }
     }});
   },
   
