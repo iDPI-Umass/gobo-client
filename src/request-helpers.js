@@ -29,18 +29,27 @@ h.content = lift( function( content, context ) {
 });
 
 h.headers = lift( function( headers, context ) {
-  if ( context.headers == null ) {
-    context.headers = {};
-  }
+  context.headers ??= {};
   Object.assign( context.headers, headers );
 });
 
 h.token = lift( function(token, context) {
-  if (context.headers == null) {
-    context.headers = {};
+  if ( token == null ) {
+    return;
   }
+  context.headers ??= {};
   Object.assign( context.headers, {
     Authorization: `Bearer ${ token }`
+  });
+});
+
+h.key = lift( function(key, context) {
+  if ( key == null ) {
+    return;
+  }
+  context.headers ??= {};
+  Object.assign( context.headers, {
+    Authorization: `GoboKey ${ key }`
   });
 });
 

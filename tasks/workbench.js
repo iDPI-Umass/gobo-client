@@ -1,6 +1,6 @@
 import FS from "node:fs/promises";
 import FormData from "form-data";
-import { getGOBO } from "./helpers.js";
+import { getGOBO, random } from "./helpers.js";
 
 const BLUESKY_URL = "https://bsky.app"
 const REDDIT_URL = "https://www.reddit.com"
@@ -538,6 +538,23 @@ const tasks = {
       name: "bootstrap platform labels",
       details: {}
     }});
+  },
+
+  listPeople: async function ( config ) {
+    const gobo = await getGOBO( config );
+    const people = await gobo.people.get({ per_page: 100 });
+    console.log(people);
+  },
+
+  createKey: async function ( config ) {
+    const gobo = await getGOBO( config );
+    const person_id = Number(config.args.person_id );
+
+    const key = await gobo.goboKeys.post({ content: {
+      person_id,
+      key: await random({ length: 32 })
+    }});
+    console.log(key);
   },
 
 };

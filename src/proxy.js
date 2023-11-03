@@ -105,7 +105,8 @@ const createMethod = function ( context, name ) {
       r.headers( defaultHeaders ),
       r.headers( options.headers ),
       r.content( content ),
-      r.token( context.token )
+      r.token( context.token ),
+      r.key( context.key )
     ]);
 
     await sublime.issue();

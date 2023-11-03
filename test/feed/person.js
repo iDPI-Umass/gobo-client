@@ -18,8 +18,6 @@ const testGroup = async function ( $ ) {
         id: identities[1].id
       });
 
-      console.log(feed);
-
       $.conforms( "person_identity_feed", "get", feed );
       h.assert.equal( 25, feed.feed.length );
     })), 

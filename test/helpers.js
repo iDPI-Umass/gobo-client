@@ -46,7 +46,7 @@ const getToken = async function () {
   return access_token;
 };
 
-const getGOBO = async function () {
+const getGOBO = async function ( options = {} ) {
   const environment = process.env.environment;
   if ( environment == null ) {
     throw new Error( "target environment is undefined" );
@@ -57,9 +57,12 @@ const getGOBO = async function () {
     throw new Error( "There is no GOBO configuration specified for this environment" );
   }
 
-  const token = await getToken();  
+  let { token, key } = options;
+  if ( token == null && key == null ) {
+    token = await getToken();
+  }  
 
-  return await getGOBOClient({ ...configuration.gobo, token, fetch });
+  return await getGOBOClient({ ...configuration.gobo, token, key, fetch });
 };
 
 
@@ -111,6 +114,7 @@ const _test = function ( name, value ) {
 };
 
 const fail = async function ( status, f ) {
+  let response;
   try {
     response = await f();
   } catch (error) {

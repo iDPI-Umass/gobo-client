@@ -1,6 +1,16 @@
 import fetch from "node-fetch";
 import { getSecret } from "@dashkite/dolores/secrets";
+import { confidential } from "panda-confidential";
 import getGOBOClient from "../src/index.js";
+
+const Confidential = confidential();
+
+const random = async function ( config = {} ) {
+  const { length = 16, encoding = "base36" } = config
+
+  return Confidential.convert({ from: "bytes", to: encoding }, 
+    await Confidential.randomBytes(length) );
+};
 
 const getFlag = function ( name, config ) {
   const value = config.args[ name ];
@@ -44,5 +54,6 @@ const getGOBO = async function (config) {
 
 export {
   getFlag,
-  getGOBO
+  getGOBO,
+  random
 }

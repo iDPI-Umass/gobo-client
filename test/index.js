@@ -18,6 +18,7 @@ import * as task from "./task/index.js";
 import * as feed from "./feed/index.js";
 import * as store from "./store/index.js";
 import * as image from "./image/index.js";
+import * as goboKey from "./gobo-key/index.js";
 
 
 (async function () {
@@ -43,7 +44,8 @@ import * as image from "./image/index.js";
       await h.test( "Filter", await filter.crud( $ ) ),
       await h.test( "Source", await source.crud( $ ) ),
       await h.test( "Post", await post.crud( $ ) ),
-      await h.test( "Task", await task.crud( $ ) )
+      await h.test( "Task", await task.crud( $ ) ),
+      await h.test( "Gobo Key", await goboKey.crud( $ ) ),
     ]),
 
     await h.test( "Actions", [

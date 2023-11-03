@@ -27,8 +27,6 @@ const testGroup = async function ( $ ) {
         }
       });
 
-      console.log(draft);
-
       $.conforms( "person_draft_images", "post", draft );
     })), 
     
