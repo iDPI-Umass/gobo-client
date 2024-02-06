@@ -107,6 +107,7 @@ const tasks = {
   
     await gobo.tasks.post({ content: {
       queue: "default",
+      priority: 1,
       name: "flow - onboard sources",
       details: { identity }
     }});
@@ -544,6 +545,12 @@ const tasks = {
     const gobo = await getGOBO( config );
     const people = await gobo.people.get({ per_page: 100 });
     console.log(people);
+  },
+
+  listIdentities: async function ( config ) {
+    const gobo = await getGOBO( config );
+    const identities = await gobo.identities.get({ per_page: 200 });
+    console.log(identities);
   },
 
   createKey: async function ( config ) {
