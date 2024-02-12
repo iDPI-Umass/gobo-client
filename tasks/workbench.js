@@ -35,6 +35,28 @@ const tasks = {
     }});
   },
 
+  fanoutUpdateIdentity: async function ( config ) {
+    const gobo = await getGOBO(config);
+    const platform = config.args.platform ?? "all";
+  
+    await gobo.tasks.post({ content: {
+      queue: "default",
+      name: "fanout - update identity",
+      details: { platform }
+    }});
+  },
+
+  fanoutUpdateNotifications: async function ( config ) {
+    const gobo = await getGOBO(config);
+    const platform = config.args.platform ?? "all";
+  
+    await gobo.tasks.post({ content: {
+      queue: "default",
+      name: "fanout - update notifications",
+      details: { platform }
+    }});
+  },
+
   pullSources: async function (config) {
     const gobo = await getGOBO(config);
     const platform = config.args.platform ?? "all";
