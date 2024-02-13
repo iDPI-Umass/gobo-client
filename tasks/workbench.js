@@ -543,6 +543,49 @@ const tasks = {
     }});
   },
 
+  testNotificationFeed: async function (config) {
+    const gobo = await getGOBO(config);
+    const personID = config.args.person_id;
+    if ( personID == null ) {
+      throw new Error("must specify 'person_id' to fetch notifications");
+    }
+    const identityID = config.args.identity_id;
+    if ( identityID == null ) {
+      throw new Error("must specify 'identity_id' to fetch notifications");
+    }
+   
+    const feed = await gobo.personNotifications.get({ 
+      person_id: personID,
+      id: identityID,
+      "view": "mentions"
+    });
+
+    console.log(feed);
+  },
+
+  testDismissNotification: async function (config) {
+    const gobo = await getGOBO(config);
+    const personID = config.args.person_id;
+    if ( personID == null ) {
+      throw new Error("must specify 'person_id' to fetch notifications");
+    }
+    const identityID = config.args.identity_id;
+    if ( identityID == null ) {
+      throw new Error("must specify 'identity_id' to fetch notifications");
+    }
+    const notificationID = config.args.notification_id;
+   
+    const notification = await gobo.personNotification.post({
+      parameters: { 
+        person_id: personID,
+        identity_id: identityID,
+        id: notificationID
+      }    
+    });
+
+    console.log(notification);
+  },
+
 
   storeDelete: async function (config) {
     const gobo = await getGOBO(config);
