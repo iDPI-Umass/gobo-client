@@ -112,6 +112,27 @@ const tasks = {
     }});
   },
 
+  clearCursors: async function (config) {
+    const gobo = await getGOBO(config);
+    const platform = config.args.platform ?? "all";
+  
+    await gobo.tasks.post({ content: {
+      queue: "default",
+      name: "clear cursors",
+      details: { platform }
+    }});
+  },
+
+  readNotifications: async function (config) {
+    const gobo = await getGOBO(config);
+    const person_id = Number(config.args.person_id);
+  
+    console.log(await gobo.personNotificationCount.put({
+        person_id,
+        count: 0
+    }));
+  },
+
 
   pruneResources: async function (config) {
     const gobo = await getGOBO(config);
