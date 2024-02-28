@@ -133,6 +133,16 @@ const tasks = {
     }));
   },
 
+  setNotifications: async function (config) {
+    const gobo = await getGOBO(config);
+    const person_id = Number(config.args.person_id);
+  
+    console.log(await gobo.personNotificationCount.put({
+        person_id,
+        count: 6
+    }));
+  },
+
 
   pruneResources: async function (config) {
     const gobo = await getGOBO(config);
