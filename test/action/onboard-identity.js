@@ -20,6 +20,7 @@ const onboardIdentity = async function ( $ ) {
 
     // await h.test( "twitter callback", h.target( "action-onboard-identity", async () => {
     //   const result = await $.gobo.actionOnboardIdentityCallback.post({ content: {
+    //     platform: "bluesky",
     //     base_url: "https://bsky.app",
     //     bluesky_login: "",
     //     bluesky_secret: "",
@@ -45,6 +46,7 @@ const onboardIdentity = async function ( $ ) {
 
     // await h.test( "reddit callback", h.target( "action-onboard-identity", async () => {
     //   const result = await $.gobo.actionOnboardIdentityCallback.post({ content: {
+    //     platform: "reddit",
     //     base_url: "https://www.reddit.com",
     //     state: "",
     //     code: ""
@@ -69,6 +71,7 @@ const onboardIdentity = async function ( $ ) {
 
     // await h.test( "mastodon callback", h.target( "action-onboard-identity", async () => {
     //   const result = await $.gobo.actionOnboardIdentityCallback.post({ content: {
+    //     platform: "mastodon",
     //     base_url: "https://mastodon.social",
     //     state: "",
     //     code: ""

@@ -46,13 +46,13 @@ const tasks = {
     }});
   },
 
-  fanoutUpdateNotifications: async function ( config ) {
+  fanoutPullNotifications: async function ( config ) {
     const gobo = await getGOBO(config);
     const platform = config.args.platform ?? "all";
   
     await gobo.tasks.post({ content: {
       queue: "default",
-      name: "fanout - update notifications",
+      name: "fanout - pull notifications",
       details: { platform }
     }});
   },
