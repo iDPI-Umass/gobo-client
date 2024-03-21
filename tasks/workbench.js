@@ -112,6 +112,17 @@ const tasks = {
     }});
   },
 
+  clearNotifications: async function ( config ) {
+    const gobo = await getGOBO(config);
+    const platform = config.args.platform ?? "all";
+  
+    await gobo.tasks.post({ content: {
+      queue: "default",
+      name: "clear notifications",
+      details: { platform }
+    }});
+  },
+
   clearCursors: async function (config) {
     const gobo = await getGOBO(config);
     const platform = config.args.platform ?? "all";
