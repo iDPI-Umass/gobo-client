@@ -68,5 +68,9 @@ import * as goboKey from "./gobo-key/index.js";
   ]));
 
   
-  process.exit( success );
+  if ( success === true ) {
+    process.exit( 0 );
+  } else {
+    process.exit( 1 );
+  }
 })();
