@@ -671,6 +671,15 @@ const tasks = {
     console.log(key);
   },
 
+  sendVerification: async function ( config ) {
+    const gobo = await getGOBO( config );
+    const person_id = Number(config.args.person_id );
+
+    await gobo.actionResendEmailVerification.post({
+      parameters: { person_id },
+    });
+  },
+
 };
 
 
