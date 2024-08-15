@@ -187,6 +187,20 @@ const tasks = {
       details: { identity }
     }});
   },
+
+  removePerson: async function (config) {
+    const gobo = await getGOBO(config);
+    const { person_id } = config.args;
+    if ( !person_id ) {
+      throw new Error("must specify person id to delete")
+    }
+  
+    await gobo.tasks.post({ content: {
+      queue: "default",
+      name: "remove person",
+      details: { person_id }
+    }});
+  },
   
   blueskyCreatePost: async function (config) {
     const gobo = await getGOBO(config);
